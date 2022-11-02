@@ -1,19 +1,19 @@
 import { App, PluginSettingTab, Setting } from "obsidian";
 import SourceYoutubePlugin from "./main";
 
-export interface SourceYoutubeSettings {
+export interface SourceImportSettings {
 	templatePath: string;
   fileNameTemplateString: string;
   outputFolder: string;
 }
 
-export const DEFAULT_SETTINGS: SourceYoutubeSettings = {
+export const DEFAULT_SETTINGS: SourceImportSettings = {
   templatePath: "",
   fileNameTemplateString: "",
   outputFolder: "",
 }
 
-export class SourceYoutubeSettingsTab extends PluginSettingTab {
+export class SourceImportSettingsTab extends PluginSettingTab {
 	plugin: SourceYoutubePlugin;
 
 	constructor(app: App, plugin: SourceYoutubePlugin) {

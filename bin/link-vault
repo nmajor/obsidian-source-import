@@ -16,6 +16,9 @@ DIR_PATH=$PWD
 VAULT_PLUGIN_PATH=$VAULT_PATH/.obsidian/plugins/$DIR_NAME
 
 rm -rf $VAULT_PLUGIN_PATH
-ln -s $PWD $VAULT_PLUGIN_PATH
+mkdir -p $VAULT_PLUGIN_PATH
+ln -s $PWD/main.js $VAULT_PLUGIN_PATH/main.js
+ln -s $PWD/styles.css $VAULT_PLUGIN_PATH/main.css
+ln -s $PWD/manifest.json $VAULT_PLUGIN_PATH/manifest.json
 
 echo "Linked vault at $VAULT_PATH"

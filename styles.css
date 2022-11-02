@@ -1,8 +1,19 @@
-/*
+.source-url-setting > div {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
 
-This CSS file will be included with your plugin, and
-available in the app when your plugin is enabled.
+.source-url-setting .setting-item-control {
+  width: 100%;
+}
 
-If your plugin does not need CSS, delete this file.
+.source-url-setting input {
+  width: 100%;
+}
 
-*/
+.source-url-setting div:nth-child(2) {
+  border-top: 0;
+  margin-top: 0;
+  padding-top: 0;
+}
