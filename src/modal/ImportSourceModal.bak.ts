@@ -1,7 +1,8 @@
 import { Console } from "console";
 import { Modal, Setting } from "obsidian";
 import SourceImportPlugin from "src/main";
-import { getDataFromYoutubeUrl } from "./parsers/youtube";
+import { errorClass, loadingClass, modalPreviewClass } from "../css";
+// import { getDataFromYoutubeUrl } from "./parsers/youtube";
 
 const domainSourceMap: { [key: string]: string } = {
 	"www.youtube.com": "youtube",
@@ -62,7 +63,7 @@ export class AddSourceModal extends Modal {
 		this.setLoading(true);
 
 		try {
-			const data = await getDataFromYoutubeUrl(this.result.url);
+			// const data = await getDataFromYoutubeUrl(this.result.url);
 		} catch (e) {
 			console.log("blah error happened", e);
 			this.setError(e.message);
@@ -97,7 +98,7 @@ export class AddSourceModal extends Modal {
 		if (this.loading) {
 			this.previewDataContainerEl.createEl("div", {
 				text: "Loading...",
-				cls: "source-import-modal-loading",
+				cls: loadingClass,
 			});
 			// TODO: Rename classes to match plugin name
 		}
@@ -144,11 +145,11 @@ export class AddSourceModal extends Modal {
 			);
 
 		this.errorContainerEl = contentEl.createEl("div", {
-			cls: "source-import-modal-error-text",
+			cls: errorClass,
 		});
 
 		this.previewDataContainerEl = contentEl.createEl("div", {
-			cls: "source-import-modal-preview-data",
+			cls: modalPreviewClass,
 		});
 
 		this.previewButtonSetting = new Setting(contentEl.createEl("div"))

@@ -1,13 +1,14 @@
 import { Plugin } from "obsidian";
-import { AddSourceModal } from "./ImportSourceModal";
+import { AddSourceModal } from "./modal/ImportSourceModal";
 import {
 	DEFAULT_SETTINGS,
-	ImportSourceSettings,
 	ImportSourceSettingTab,
-} from "./ImportSourceSettingTab";
+} from "./settings/ImportSourceSettingTab";
+import { ImportSourceSettings } from "./settings/settings.types";
 
 export default class ImportMetatagsPlugin extends Plugin {
 	settings: ImportSourceSettings;
+	defaultDateFormat = "YYYY-MM-DD";
 
 	async onload() {
 		await this.loadSettings();
