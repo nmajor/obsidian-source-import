@@ -71,3 +71,14 @@ Quick starting guide for new plugin devs:
 ## API Documentation
 
 See https://github.com/obsidianmd/obsidian-api
+
+## Get YouTube API Key
+
+#### Enable the YouTube Data API V3
+
+- Go to https://console.cloud.google.com/
+- Click on the menu icon in the top left and select APIs & Services -> Enabled APIs & services
+- Click "+ Enable APIs and Services"
+- Find the YouTube Data API V3 and enable it
+
+#### Create YouTube API Key

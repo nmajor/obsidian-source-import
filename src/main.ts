@@ -1,20 +1,20 @@
 import { Plugin } from "obsidian";
-import { AddSourceModal } from "./AddSourceModal";
+import { AddSourceModal } from "./ImportSourceModal";
 import {
 	DEFAULT_SETTINGS,
-	SourceImportSettings,
-	SourceImportSettingsTab,
-} from "./SourceImportSettingsTab";
+	ImportSourceSettings,
+	ImportSourceSettingTab,
+} from "./ImportSourceSettingTab";
 
-export default class SourceImportPlugin extends Plugin {
-	settings: SourceImportSettings;
+export default class ImportMetatagsPlugin extends Plugin {
+	settings: ImportSourceSettings;
 
 	async onload() {
 		await this.loadSettings();
 
 		// This adds a simple command that can be triggered anywhere
 		this.addCommand({
-			id: "open-import-source-modal",
+			id: "open-source-import-modal",
 			name: "Import a Source",
 			callback: () => {
 				new AddSourceModal({
@@ -25,7 +25,7 @@ export default class SourceImportPlugin extends Plugin {
 		});
 
 		// This adds a settings tab so the user can configure various aspects of the plugin
-		this.addSettingTab(new SourceImportSettingsTab(this.app, this));
+		this.addSettingTab(new ImportSourceSettingTab(this.app, this));
 	}
 
 	handleAddModalSubmit() {

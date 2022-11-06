@@ -1,19 +1,44 @@
-.source-url-setting > div {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
+.source-import-modal-url-setting {
+	display: flex;
+	flex-direction: column;
+	gap: 0.5rem;
 }
 
-.source-url-setting .setting-item-control {
-  width: 100%;
+.source-import-modal-url-setting .setting-item-control {
+	width: 100%;
 }
 
-.source-url-setting input {
-  width: 100%;
+.source-import-modal-url-setting input {
+	width: 100%;
 }
 
-.source-url-setting div:nth-child(2) {
-  border-top: 0;
-  margin-top: 0;
-  padding-top: 0;
+.source-import-modal-error-text {
+	color: red;
+}
+
+.source-import-modal-preview-button > div {
+	border-top: 0;
+	margin-top: 0;
+	padding-top: 0;
+}
+
+.source-import-modal-loading {
+	text-align: center;
+	padding: 0.5rem;
+
+	animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+
+	@keyframes pulse {
+		0%,
+		100% {
+			opacity: 1;
+		}
+		50% {
+			opacity: 0.5;
+		}
+	}
+}
+
+.import-source-setting-indent {
+	padding-left: 1rem;
 }
