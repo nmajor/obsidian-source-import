@@ -81,9 +81,18 @@
 .source-import-control-full-width-input {
 	display: block;
 }
-
 .source-import-control-full-width-input input {
 	margin-top: 0.5rem;
+	width: 100%;
+}
+
+.source-import-control-full-width-input-with-extra-button {
+	display: block;
+}
+.source-import-control-full-width-input-with-extra-button .setting-item-name {
+	padding-bottom: 0.5rem;
+}
+.source-import-control-full-width-input-with-extra-button input {
 	width: 100%;
 }
 

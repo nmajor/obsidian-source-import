@@ -1,18 +1,14 @@
 import { Setting } from "obsidian";
-import { builderResultClass, nestedSettingClass } from "src/css";
-import { extractDomainFromUrl } from "src/helpers";
-import { SourceSettingRenderProps, SourceTagProps } from "./settings.types";
+import { builderResultClass, nestedSettingClass } from "../constants";
+import { extractDomainFromUrl } from "../helpers";
+import { SourceSettingRenderProps, SourceTagProps } from "../types";
 
 export const renderSourceBuilderResultsSetting = (
 	props: SourceSettingRenderProps
 ) => {
 	const { el, source, sourceMeta, save, refresh } = props;
-	sourceMeta.builderResults ||= [];
 
-	if (
-		!sourceMeta.builderUrl ||
-		(sourceMeta.builderResults || []).length === 0
-	)
+	if (!sourceMeta.builderUrl || sourceMeta.builderResults === undefined)
 		return;
 
 	const resultsEl = el.createEl("div", {
@@ -40,6 +36,11 @@ export const renderSourceBuilderResultsSetting = (
 					}
 				})
 		);
+
+	if (sourceMeta.builderResults.length === 0) {
+		new Setting(resultsEl).setName("No source metatags found");
+		return;
+	}
 
 	sourceMeta.builderResults.forEach((result) => {
 		const selectedTag: SourceTagProps | undefined = (

@@ -4,7 +4,7 @@ import {
 	DEFAULT_SETTINGS,
 	ImportSourceSettingTab,
 } from "./settings/ImportSourceSettingTab";
-import { ImportSourceSettings } from "./settings/settings.types";
+import { ImportSourceSettings } from "./types";
 
 export default class ImportMetatagsPlugin extends Plugin {
 	settings: ImportSourceSettings;
@@ -31,6 +31,14 @@ export default class ImportMetatagsPlugin extends Plugin {
 
 	handleAddModalSubmit() {
 		console.log("blah");
+	}
+
+	getSourceByDomain(domain: string) {
+		const sources = this.settings.sources || {};
+		const sourceId = Object.keys(sources).find((sourceId) =>
+			sources[sourceId].domains?.includes(domain)
+		);
+		return sourceId && sources[sourceId];
 	}
 
 	onunload() {}

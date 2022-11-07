@@ -1,6 +1,6 @@
 import { Setting } from "obsidian";
-import { FolderSuggest } from "src/FolderSuggest";
-import { SourceSettingRenderProps } from "./settings.types";
+import { FolderSuggest } from "../suggest/FolderSuggest";
+import { SourceSettingRenderProps } from "../types";
 
 export const renderSourceOutputDirPathSetting = (
 	props: SourceSettingRenderProps

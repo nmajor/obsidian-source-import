@@ -1,13 +1,13 @@
 import { nanoid } from "nanoid";
 import { App, PluginSettingTab, Setting } from "obsidian";
-import SourceImportPlugin from "src/main";
+import SourceImportPlugin from "../main";
 import {
 	ImportSourceSettings,
 	SourceMetaOptions,
 	SourceMetaOptionsMap,
 	SourceSettingRenderProps,
 	SourceSettingProps,
-} from "./settings.types";
+} from "src/types";
 import { renderSourceBuilderResultsSetting } from "./renderSourceBuilderResultsSetting";
 import { renderSourceDomainsHeadSetting } from "./renderSourceDomainsHeadSetting";
 import { renderSourceDomainsSetting } from "./renderSourceDomainsSetting";
@@ -18,7 +18,7 @@ import { renderSourceSetting } from "./renderSourceSetting";
 import { renderSourceTagsHeadSetting } from "./renderSourceTagsHeadSetting";
 import { renderSourceTagsSetting } from "./renderSourceTagsSetting";
 import { renderSourceTemplateFilePathSetting } from "./renderSourceTemplateFilePathSetting";
-import { nestedSettingClass } from "src/css";
+import { nestedSettingClass } from "../constants";
 
 export const transformOptions = ["text", "date"] as const;
 

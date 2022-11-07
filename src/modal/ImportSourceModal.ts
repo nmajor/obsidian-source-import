@@ -1,39 +1,26 @@
-import { Console } from "console";
 import { Modal, Notice, requestUrl, Setting } from "obsidian";
 import SourceImportPlugin from "src/main";
-import { SourceTagProps } from "src/settings/settings.types";
 import {
 	constructTemplateExtractMap,
 	extractDomainFromUrl,
 	extractMetaTagsFromHtml,
 	transformMetaTagStringsToTemplateMap,
 } from "src/helpers";
-import { fullWidthInputClass, fullWidthInputWithExtraButtonClass } from "../css";
-
-const domainSourceMap: { [key: string]: string } = {
-	"www.youtube.com": "youtube",
-	"youtu.be": "youtube",
-};
-const urlSettingPlaceholder = "https://www.youtube.com/watch?v=dQw4w9WgXcQ";
-
-export interface SourceTemplateExtractMap {
-	[key: string]: SourceTagProps;
-}
-
-export interface SourceTemplateValueMap {
-	[key: string]: string;
-}
-
-export interface AddSourceResult {
-	filename?: string;
-	body?: string;
-}
+import {
+	fullWidthInputClass,
+	fullWidthInputWithExtraButtonClass,
+} from "../constants";
+import {
+	AddSourceResult,
+	SourceSettingProps,
+	SourceTemplateValueMap,
+} from "src/types";
 
 interface AddSourceModalData {
 	url?: string;
 	domain?: string;
 	sourceId?: string;
-	templateMap: SourceTemplateValueMap;
+	templateMap?: SourceTemplateValueMap;
 }
 
 interface AddSourceModalOptions {
@@ -47,13 +34,32 @@ export class AddSourceModal extends Modal {
 	onSubmit: (result: AddSourceResult) => void;
 	data: AddSourceModalData;
 
+	sourceValuesEl: HTMLElement;
+
 	constructor(options: AddSourceModalOptions) {
 		const { plugin, onSubmit } = options;
 
 		super(plugin.app);
 		this.plugin = plugin;
+		this.data = {};
 
 		this.onSubmit = onSubmit;
+	}
+
+	renderValues(el: HTMLElement) {
+		const { templateMap } = this.data;
+		if (!templateMap) return;
+
+		for (const [key, value] of Object.entries(templateMap)) {
+			new Setting(el)
+				.setName(key)
+				.setClass(fullWidthInputClass)
+				.addText((text) => {
+					text.setValue(value || "").onChange((value) => {
+						templateMap[key] = value;
+					});
+				});
+		}
 	}
 
 	renderUrlSetting(el: HTMLElement) {
@@ -74,14 +80,14 @@ export class AddSourceModal extends Modal {
 					.setIcon("sync")
 					.setTooltip("Sync Preview")
 					.onClick(async () => {
+						console.log("blah hi before");
 						if (!this.data.url) return new Notice("Url missing :)");
+						console.log("blah hi after");
 
 						const domain = extractDomainFromUrl(this.data.url);
 						if (!domain) return new Notice("Invalid Url :(");
 
-						const source = Object.values(
-							this.plugin.settings.sources || {}
-						).find((source) => source.domains?.includes(domain));
+						const source = this.plugin.getSourceByDomain(domain);
 
 						if (!source) return new Notice("No source found :(");
 
@@ -107,10 +113,7 @@ export class AddSourceModal extends Modal {
 									this.plugin.defaultDateFormat
 							);
 
-						console.log(
-							"blah hi templateValueMap",
-							templateValueMap
-						);
+						this.data.templateMap = templateValueMap;
 					})
 			);
 	}

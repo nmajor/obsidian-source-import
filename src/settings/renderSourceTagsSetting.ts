@@ -1,7 +1,7 @@
 import { Setting } from "obsidian";
-import { sourceTagSettingClass } from "src/css";
-import { transformOptions } from "src/settings/ImportSourceSettingTab";
-import { SourceSettingRenderProps } from "./settings.types";
+import { sourceTagSettingClass } from "../constants";
+import { transformOptions } from "../settings/ImportSourceSettingTab";
+import { SourceSettingRenderProps } from "../types";
 
 export const renderSourceTagsSetting = (props: SourceSettingRenderProps) => {
 	const { el, source, save, refresh } = props;

@@ -2,8 +2,8 @@ import { Notice, requestUrl, Setting } from "obsidian";
 import {
 	extractMetaTagsFromHtml,
 	extractPropsFromMetaTagStrings,
-} from "src/helpers";
-import { SourceSettingRenderProps } from "./settings.types";
+} from "../helpers";
+import { SourceSettingRenderProps } from "../types";
 
 export const renderSourceMetaBuilderSetting = (
 	props: SourceSettingRenderProps
@@ -26,7 +26,6 @@ export const renderSourceMetaBuilderSetting = (
 						sourceMeta.builderUrl = value;
 					})
 			)
-
 			.addExtraButton((btn) =>
 				btn
 					.setIcon("sync")
@@ -35,7 +34,7 @@ export const renderSourceMetaBuilderSetting = (
 						if (!sourceMeta.builderUrl)
 							return new Notice("The url needs a builder :)");
 
-						sourceMeta.builderResults = [];
+						sourceMeta.builderResults = undefined;
 
 						const response = await requestUrl({
 							method: "get",

@@ -1,33 +1,45 @@
+/**
+ * @jest-environment jsdom
+ */
+
 import "@testing-library/jest-dom";
-// ! TODO: Figure out how to test these render functions without having to import obsidian setting class
+import { getByText } from "@testing-library/dom";
+import { renderSourceBuilderResultsSetting } from "./renderSourceBuilderResultsSetting";
+
+jest.mock(
+	"obsidian",
+	() => {
+		return {
+			requestUrl: jest.fn(),
+		};
+	},
+	{ virtual: true }
+);
 
 describe("renderSourceBuilderResultsSetting", () => {
-	it("keeps the test file from being empty", () => {
+	it("Figure out a way to test obsidian settings...", () => {
 		expect(true).toBeTruthy();
 	});
 });
 
-// import { getByText } from "@testing-library/dom";
-// import "@testing-library/jest-dom";
-// import { renderSourceBuilderResultsSetting } from "./renderSourceBuilderResultsSetting";
-
 // describe("renderSourceBuilderResultsSetting", () => {
-// it("renders the empty state", () => {
-// 	// ARRANGE
-// 	const props = {
-// 		el: document.createElement("div"),
-// 		source: { id: "test" },
-// 		sources: {},
-// 		sourceMeta: { id: "test" },
-// 		sourcesMeta: {},
-// 		save: jest.fn(),
-// 		refresh: jest.fn(),
-// 	};
+// 	it("renders the empty state", () => {
+// 		const div = document.createElement("div");
+// 		// ARRANGE
+// 		const props = {
+// 			el: div,
+// 			source: { id: "test" },
+// 			sources: {},
+// 			sourceMeta: { id: "test" },
+// 			sourcesMeta: {},
+// 			save: jest.fn(),
+// 			refresh: jest.fn(),
+// 		};
 
-// 	// ACT
-// 	renderSourceBuilderResultsSetting(props);
+// 		// ACT
+// 		renderSourceBuilderResultsSetting(props);
 
-// 	// ASSERT
-// 	expect(getByText(props.el, "No sources found")).toBeTruthy();
-// });
+// 		// ASSERT
+// 		expect(getByText(div, "No source metatags found")).toBeTruthy();
+// 	});
 // });

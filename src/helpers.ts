@@ -1,28 +1,20 @@
-import * as moment from "moment";
-import { SourceTagProps } from "src/settings/settings.types";
 import {
+	SourceTagProps,
 	SourceTemplateExtractMap,
 	SourceTemplateValueMap,
-} from "./modal/ImportSourceModal";
+} from "src/types";
 
-export interface TagMapProperties {
-	[key: string]: {
-		key: string;
-		format: (value: string) => string | number | Date;
-	};
-}
-
-export const matchMetaTagsRegex = new RegExp(
+const matchMetaTagsRegex = new RegExp(
 	"<meta\\s(?:\"[^\"]*\"['\"]*|'[^']*'['\"]*|[^'\">])+>",
 	"gi"
 );
 
-export const matchMetaAttributeRegex = new RegExp(
+const matchMetaAttributeRegex = new RegExp(
 	'<meta[\\s \n]+(.*)="(.*)"[\\s \n]+content="(.*)"',
 	"i"
 );
 
-export const extractDomainFromUrlRegex = new RegExp(
+const extractDomainFromUrlRegex = new RegExp(
 	"^(?:https?://)?(?:[^@\n]+@)?((?:[a-zA-Z-].)?[^:/\n?]+)",
 	"i"
 );
@@ -41,7 +33,6 @@ export const extractMetaTagsFromHtml = (htmlString: string): string[] => {
 export const extractPropsFromMetaTagStrings = (
 	metaTagStrings: string[]
 ): SourceTagProps[] => {
-
 	const result: SourceTagProps[] = [];
 
 	metaTagStrings.forEach((tagString) => {
@@ -86,18 +77,32 @@ export const transformMetaTagStringsToTemplateMap = (
 			(key) => tagString.includes(key)
 		);
 
+		console.log("blah hi there 1", matchingTemplateKey);
+
 		if (matchingTemplateKey) {
 			const { templateLabel, transform } =
 				templateExtractMap[matchingTemplateKey];
+			console.log("blah hi there 2", templateLabel, transform);
 			const match = matchMetaAttributeRegex.exec(tagString);
 			const [, , , content] = match || [];
 
 			if (!match || !templateLabel) return;
 
 			if (transform === "date") {
-				result[templateLabel] = moment(content).format(dateFormat);
-				result[`${templateLabel}:YYYY`] =
-					moment(content).format("YYYY");
+				console.log("blah hi there 3", content);
+				result[templateLabel] = window
+					.moment(content)
+					.format(dateFormat);
+
+				console.log(
+					"blah hi there 4",
+					content,
+					window.moment(content).format("YYYY")
+				);
+
+				result[`${templateLabel}:YYYY`] = window
+					.moment(content)
+					.format("YYYY");
 			} else {
 				result[templateLabel] = content;
 			}
