@@ -12,6 +12,9 @@ import {
 	constructTemplateExtractMap,
 	extractPropsFromMetaTagStrings,
 	transformMetaTagStringsToTemplateMap,
+	extractTagsFromTemplate,
+	generateContentFromTemplate,
+	extractYoutubeChannelDataFromHtml,
 } from "./helpers";
 
 describe("extractDomainFromUrl", () => {
@@ -121,6 +124,62 @@ describe("constructTemplateExtractMap", () => {
 				content: "2021-11-30",
 				transform: "date",
 			},
+		});
+	});
+});
+
+describe("generateContentFromTemplate", () => {
+	it("returns a filename based on the template", () => {
+		// ARRANGE
+		const template = "{{DATE_PUBLISHED:YYY}} - {{TITLE}}";
+		const templateMap = {
+			TITLE: "The title of the page",
+			DATE_PUBLISHED: "2022-11-02",
+			"DATE_PUBLISHED:YYY": "2022",
+		};
+
+		// ACT
+		const result = generateContentFromTemplate(template, templateMap);
+
+		// ASSERT
+		expect(typeof result).toBe("string");
+		expect(result).toBe("2022 - The title of the page");
+	});
+});
+
+describe("extractTagsFromTemplate", () => {
+	it("returns an array of tags", () => {
+		// ARRANGE
+		const template = "hello {{DATE_PUBLISHED:YYY}} - {{TITLE}} there";
+
+		// ACT
+		const result = extractTagsFromTemplate(template);
+
+		// ASSERT
+		expect(Array.isArray(result)).toBeTruthy();
+		expect(result.length).toBe(2);
+		expect(result[0]).toBe("DATE_PUBLISHED:YYY");
+		expect(result[1]).toBe("TITLE");
+	});
+});
+
+describe("extractYoutubeChannelDataFromHtml", () => {
+	it("returns the channel data", () => {
+		const htmlString = `
+			<meta itemprop="duration" content="PT3M33S">
+				<span itemprop="author" itemscope itemtype="http://schema.org/Person">
+					<link itemprop="url" href="http://www.youtube.com/channel/UCuAXFkgsw1L7xaCfnd5JJOw">
+					<link itemprop="name" content="Rick Astley">
+				</span>
+			<meta itemprop="unlisted" content="False">
+		`;
+
+		const result = extractYoutubeChannelDataFromHtml(htmlString);
+
+		expect(result).toEqual({
+			channelUrl:
+				"http://www.youtube.com/channel/UCuAXFkgsw1L7xaCfnd5JJOw",
+			channelName: "Rick Astley",
 		});
 	});
 });

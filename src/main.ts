@@ -1,10 +1,18 @@
-import { Plugin } from "obsidian";
+import { Notice, Plugin, TFile, TFolder } from "obsidian";
+import {
+	extractTagsFromTemplate,
+	generateContentFromTemplate,
+} from "./helpers";
 import { AddSourceModal } from "./modal/ImportSourceModal";
 import {
 	DEFAULT_SETTINGS,
 	ImportSourceSettingTab,
 } from "./settings/ImportSourceSettingTab";
-import { ImportSourceSettings } from "./types";
+import {
+	AddSourceResult,
+	ImportSourceSettings,
+	SourceSettingProps,
+} from "./types";
 
 export default class ImportMetatagsPlugin extends Plugin {
 	settings: ImportSourceSettings;
@@ -29,16 +37,104 @@ export default class ImportMetatagsPlugin extends Plugin {
 		this.addSettingTab(new ImportSourceSettingTab(this.app, this));
 	}
 
-	handleAddModalSubmit() {
-		console.log("blah");
+	async handleAddModalSubmit({
+		filename,
+		templatePath,
+		outputDirPath,
+		templateMap,
+	}: AddSourceResult) {
+		const templateFile = this.getFile(templatePath);
+		const outputDir = this.getDir(outputDirPath);
+
+		if (templateFile && outputDir) {
+			const data = await this.getFileData(templateFile);
+			const templatedData = generateContentFromTemplate(
+				data,
+				templateMap
+			);
+			this.saveFile(filename, outputDir, templatedData);
+		}
 	}
 
-	getSourceByDomain(domain: string) {
+	getSource(domain: string) {
 		const sources = this.settings.sources || {};
 		const sourceId = Object.keys(sources).find((sourceId) =>
 			sources[sourceId].domains?.includes(domain)
 		);
-		return sourceId && sources[sourceId];
+
+		if (sourceId) {
+			const source = sources[sourceId];
+
+			if (!source.filenameTemplate)
+				source.filenameTemplate =
+					this.settings.defaultSource.filenameTemplate;
+
+			if (!source.templateFilePath)
+				source.templateFilePath =
+					this.settings.defaultSource.templateFilePath;
+
+			if (!source.outputDirPath)
+				source.outputDirPath =
+					this.settings.defaultSource.outputDirPath;
+
+			return source;
+		}
+
+		return this.settings.defaultSource;
+	}
+
+	async getSourceTemplateTags(source: SourceSettingProps) {
+		source.templateFilePath;
+
+		if (!source.templateFilePath) {
+			new Notice("No template file path set");
+			return;
+		}
+
+		const templateFile = this.getFile(source.templateFilePath);
+
+		if (!templateFile) {
+			new Notice("Template file not found or invalid");
+			return;
+		}
+
+		const data = await this.getFileData(templateFile);
+
+		if (!data) {
+			new Notice("Template file is empty");
+			return;
+		}
+
+		return extractTagsFromTemplate(data);
+	}
+
+	getDateFormat() {
+		return this.settings.dateFormat || this.defaultDateFormat;
+	}
+
+	getFile(templatePath: string): TFile | void {
+		const file = this.app.vault.getAbstractFileByPath(templatePath);
+		if (file instanceof TFile) return file as TFile;
+		new Notice("Template file not found or invalid");
+	}
+
+	getDir(outputDirPath: string): TFolder | void {
+		const dir = this.app.vault.getAbstractFileByPath(outputDirPath);
+		if (dir instanceof TFolder) return dir as TFolder;
+		new Notice("Output directory not found or invalid");
+	}
+
+	async getFileData(file: TFile) {
+		const data = await this.app.vault.read(file);
+		return data;
+	}
+
+	async saveFile(filename: string, outputDir: TFolder, data: string) {
+		const file: TFile = await app.fileManager.createNewMarkdownFile(
+			outputDir,
+			filename
+		);
+		await app.vault.modify(file, data);
 	}
 
 	onunload() {}

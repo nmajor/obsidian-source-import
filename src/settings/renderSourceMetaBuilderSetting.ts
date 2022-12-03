@@ -8,11 +8,15 @@ import { SourceSettingRenderProps } from "../types";
 export const renderSourceMetaBuilderSetting = (
 	props: SourceSettingRenderProps
 ) => {
-	const { el, source, sourceMeta, save, refresh } = props;
+	const { el, sourceMeta, refresh } = props;
 
 	const setting = new Setting(el)
-		.setName("Source Builder")
-		.setDesc("Paste a URL here and click the 'Sync' button");
+		.setName("Source Settings")
+		.setDesc(
+			sourceMeta.showBuilder
+				? "Paste a URL and 'Sync'"
+				: "Toggle to use source builder"
+		);
 
 	if (sourceMeta.showBuilder) {
 		setting

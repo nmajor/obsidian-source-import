@@ -1,4 +1,6 @@
 export const nestedSettingClass: string = "import-source-setting-indent";
+export const settingTopPaddingClass: string = "import-source-setting-top-padding";
+export const settingTopBorderClass: string = "import-source-setting-top-border";
 export const builderResultClass: string = "import-source-builder-result";
 export const loadingClass: string = "source-import-modal-loading";
 export const errorClass: string = "source-import-modal-error-text";

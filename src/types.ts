@@ -1,5 +1,3 @@
-import { transformOptions } from "./settings/ImportSourceSettingTab";
-
 // This fixes the type error when referencing this.app.dom
 declare module "obsidian" {
 	interface dom {
