@@ -20,7 +20,7 @@ export const transformMetaTagStringsToTemplateMap = (
 			const match = matchMetaAttributeRegex.exec(tagString);
 			const [, , , content] = match || [];
 
-			if (!match || !templateLabel) return;
+			if (!templateLabel) return;
 
 			if (transform === "date") {
 				result[templateLabel] = moment(content).format(dateFormat);

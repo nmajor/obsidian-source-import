@@ -18,7 +18,10 @@ import { FolderSuggest } from "src/suggest/FolderSuggest";
 import { extractMetaTagsFromHtml } from "src/helpers/extractMetaTagsFromHtml";
 import { constructTemplateExtractMap } from "src/helpers/constructTemplateExtractMap";
 import { transformMetaTagStringsToTemplateMap } from "src/helpers/transformMetaTagStringsToTemplateMap";
-import { constructDefaultTemplateMap } from "src/helpers/constructDefaultTemplateMap";
+import {
+	constructDefaultTemplateMap,
+	defaultSourceTagsMap,
+} from "src/helpers/constructDefaultTemplateMap";
 import { extractDomainFromUrl } from "src/helpers/extractDomainFromUrl";
 import { extractDefaultTagDataFromHtml } from "src/helpers/extractDefaultTagDataFromHtml";
 import { generateContentFromTemplate } from "src/helpers/generateContentFromTemplate";
@@ -47,7 +50,7 @@ export class AddSourceModal extends Modal {
 
 		super(plugin.app);
 		this.plugin = plugin;
-		this.data = { defaultTags: {}, sourceTemplateTags: [] };
+		this.data = { defaultTags: {}, sourceTemplateTagMap: {} };
 
 		this.onSubmit = onSubmit;
 	}
@@ -73,6 +76,7 @@ export class AddSourceModal extends Modal {
 
 		new Setting(el)
 			.setName("Filename")
+			.setDesc(this.data.source?.filenameTemplate || "")
 			.setClass(fullWidthInputClass)
 			.addText((text) => {
 				text.setPlaceholder("filename")
@@ -101,11 +105,26 @@ export class AddSourceModal extends Modal {
 			});
 
 			Object.keys(templateMap).forEach((key) => {
-				new Setting(el).setName(key).addText((text) => {
-					text.setValue(templateMap[key]).onChange(async (value) => {
-						templateMap[key] = value;
+				const isDefault = !!defaultSourceTagsMap[key];
+
+				// This means the tag was not found in the template so not showing
+				if (!this.data.sourceTemplateTagMap[key]) return;
+
+				let desc = "";
+				if (isDefault) {
+					desc += "Default ";
+				}
+
+				new Setting(el)
+					.setName(key)
+					.setDesc(desc)
+					.addText((text) => {
+						text.setValue(templateMap[key] || "").onChange(
+							async (value) => {
+								templateMap[key] = value;
+							}
+						);
 					});
-				});
 			});
 		}
 
@@ -171,9 +190,9 @@ export class AddSourceModal extends Modal {
 	): SourceTemplateValueMap {
 		const metaTagStrings = extractMetaTagsFromHtml(htmlString);
 
-		const extractMap = constructTemplateExtractMap(
-			this.data.source?.tags || []
-		);
+		const extractMap = constructTemplateExtractMap(source.tags || []);
+
+		this.data.defaultTags = extractDefaultTagDataFromHtml(htmlString);
 
 		const dateFormat = this.plugin.getDateFormat();
 		const templateValueMap = {
@@ -232,20 +251,16 @@ export class AddSourceModal extends Modal {
 						if (!this.data.source)
 							return new Notice("Source not found :(");
 
-						this.data.sourceTemplateTags =
-							(await this.plugin.getSourceTemplateTags(
+						this.data.sourceTemplateTagMap =
+							(await this.plugin.getSourceTemplateTagMap(
 								this.data.source
-							)) || [];
+							)) || {};
 
 						const response = await requestUrl({
 							method: "get",
 							url: this.data.url,
 							contentType: "application/json",
 						});
-
-						this.data.defaultTags = extractDefaultTagDataFromHtml(
-							response.text
-						);
 
 						this.templateMap = this.buildTemplateMap(
 							response.text,

@@ -1,5 +1,5 @@
 import { SourceTemplateValueMap } from "src/types";
-import { templateTagMatchRegex } from "./extractTagsFromTemplate";
+import { templateTagMatchRegex } from "./extractTagsFromTemplateIntoMap";
 
 export const generateContentFromTemplate = (
 	template: string,
@@ -7,6 +7,6 @@ export const generateContentFromTemplate = (
 ) => {
 	return template.replace(
 		templateTagMatchRegex,
-		(match, key) => templateMap[key]
+		(match, key) => templateMap[key] || ""
 	);
 };

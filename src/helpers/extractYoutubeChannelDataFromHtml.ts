@@ -1,6 +1,6 @@
 const extractYoutubeChannelDataRegex = new RegExp(
 	// eslint-disable-next-line no-control-regex
-	'<span[\\s \n]+itemprop="author"[\\s \n]+.*>[\\s \n]+<link[\\s \n]itemprop="url"[\\s \n]href="(.*)">[\\s \n]+<link[\\s \n]+itemprop="name"[\\s \n]+content="(.*)">[\\s \n]+</span>',
+	'<span[\\s \n\t]+itemprop="author"[\\s \n\t]+.*>[\\s \n\t]*<link[\\s \n\t]+itemprop="url"[\\s \n\t]+href="(.*)">[\\s \n\t]*<link[\\s \n\t]+itemprop="name"[\\s \n\t]+content="([^<>\n]*)">[\\s \n\t]*</span>',
 	"i"
 );
 

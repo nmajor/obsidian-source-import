@@ -11,7 +11,7 @@ describe("extractYoutubeChannelDataFromHtml", () => {
 				id: "youtube",
 				name: "Youtube",
 			},
-			sourceTemplateTags: [],
+			sourceTemplateTagMap: {},
 			defaultTags: {
 				title: "Rick Astley - Never Gonna Give You Up (Video)",
 				channelName: "Rick Astley",
@@ -26,7 +26,7 @@ describe("extractYoutubeChannelDataFromHtml", () => {
 			SOURCE_NAME: "Youtube",
 			SOURCE_URL: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
 			SOURCE_DOMAIN: "www.youtube.com",
-			TITLE: "Rick Astley - Never Gonna Give You Up (Video)",
+		TITLE: "Rick Astley - Never Gonna Give You Up (Video)",
 			TODAY: moment().format("YYYY-MM-DD"),
 			"TODAY:YYYY": moment().format("YYYY"),
 			CHANNEL_NAME: "Rick Astley",

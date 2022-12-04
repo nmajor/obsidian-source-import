@@ -1,5 +1,5 @@
 import { Notice, Plugin, TFile, TFolder } from "obsidian";
-import { extractTagsFromTemplate } from "./helpers/extractTagsFromTemplate";
+import { extractTagsFromTemplateIntoMap } from "./helpers/extractTagsFromTemplateIntoMap";
 import { generateContentFromTemplate } from "./helpers/generateContentFromTemplate";
 import { AddSourceModal } from "./modal/ImportSourceModal";
 import {
@@ -81,7 +81,7 @@ export default class ImportMetatagsPlugin extends Plugin {
 		};
 	}
 
-	async getSourceTemplateTags(source: SourceSettingProps) {
+	async getSourceTemplateTagMap(source: SourceSettingProps) {
 		source.templateFilePath;
 
 		if (!source.templateFilePath) {
@@ -103,7 +103,7 @@ export default class ImportMetatagsPlugin extends Plugin {
 			return;
 		}
 
-		return extractTagsFromTemplate(data);
+		return extractTagsFromTemplateIntoMap(data);
 	}
 
 	getDateFormat() {

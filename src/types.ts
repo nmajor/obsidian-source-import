@@ -33,7 +33,7 @@ export interface SourceTemplateExtractMap {
 }
 
 export interface SourceTemplateValueMap {
-	[key: string]: string;
+	[key: string]: string | undefined;
 }
 
 export interface AddSourceResult {
@@ -100,7 +100,7 @@ export interface AddSourceModalData {
 	domain?: string;
 	sourceId?: string;
 	source?: SourceSettingProps;
-	sourceTemplateTags: string[];
+	sourceTemplateTagMap: { [key: string]: boolean };
 	defaultTags: AddSourceModalDefaultTagData;
 }
 

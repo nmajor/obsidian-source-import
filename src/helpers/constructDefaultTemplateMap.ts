@@ -57,9 +57,7 @@ export const constructDefaultTemplateMap = (
 	Object.keys(defaultSourceTagsMap).forEach((key) => {
 		const { getValue } = defaultSourceTagsMap[key];
 		const value = getValue({ data, dateFormat, moment });
-		if (value) {
-			result[key] = value;
-		}
+		result[key] = value;
 	});
 
 	return result;
