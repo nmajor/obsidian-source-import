@@ -1,8 +1,6 @@
 import { Notice, Plugin, TFile, TFolder } from "obsidian";
-import {
-	extractTagsFromTemplate,
-	generateContentFromTemplate,
-} from "./helpers";
+import { extractTagsFromTemplate } from "./helpers/extractTagsFromTemplate";
+import { generateContentFromTemplate } from "./helpers/generateContentFromTemplate";
 import { AddSourceModal } from "./modal/ImportSourceModal";
 import {
 	DEFAULT_SETTINGS,
@@ -28,7 +26,7 @@ export default class ImportMetatagsPlugin extends Plugin {
 			callback: () => {
 				new AddSourceModal({
 					plugin: this,
-					onSubmit: this.handleAddModalSubmit,
+					onSubmit: this.handleAddModalSubmit.bind(this),
 				}).open();
 			},
 		});
@@ -48,15 +46,12 @@ export default class ImportMetatagsPlugin extends Plugin {
 
 		if (templateFile && outputDir) {
 			const data = await this.getFileData(templateFile);
-			const templatedData = generateContentFromTemplate(
-				data,
-				templateMap
-			);
-			this.saveFile(filename, outputDir, templatedData);
+			const body = generateContentFromTemplate(data, templateMap);
+			this.saveFile(filename, outputDir, body);
 		}
 	}
 
-	getSource(domain: string) {
+	getSource(domain: string): SourceSettingProps {
 		const sources = this.settings.sources || {};
 		const sourceId = Object.keys(sources).find((sourceId) =>
 			sources[sourceId].domains?.includes(domain)
@@ -66,21 +61,24 @@ export default class ImportMetatagsPlugin extends Plugin {
 			const source = sources[sourceId];
 
 			if (!source.filenameTemplate)
-				source.filenameTemplate =
-					this.settings.defaultSource.filenameTemplate;
+				source.filenameTemplate = this.settings.defaultFilenameTemplate;
 
 			if (!source.templateFilePath)
-				source.templateFilePath =
-					this.settings.defaultSource.templateFilePath;
+				source.templateFilePath = this.settings.defaultTemplateFilePath;
 
 			if (!source.outputDirPath)
-				source.outputDirPath =
-					this.settings.defaultSource.outputDirPath;
+				source.outputDirPath = this.settings.defaultOutputDirPath;
 
 			return source;
 		}
 
-		return this.settings.defaultSource;
+		return {
+			id: "default",
+			name: "Default",
+			filenameTemplate: this.settings.defaultFilenameTemplate,
+			templateFilePath: this.settings.defaultTemplateFilePath,
+			outputDirPath: this.settings.defaultOutputDirPath,
+		};
 	}
 
 	async getSourceTemplateTags(source: SourceSettingProps) {

@@ -1,25 +1,31 @@
+import moment from "moment";
+
 // This fixes the type error when referencing this.app.dom
 declare module "obsidian" {
+	interface Document {
+		moment: typeof moment;
+	}
+
 	interface dom {
 		appContainerEl: HTMLElement;
 	}
 
-	// interface Vault {
-	// 	getConfig: (key: string) => string;
-	// 	exists: (path: string) => Promise<boolean>;
-	// }
-	// interface FileManager {
-	// 	createNewMarkdownFile: (
-	// 		folder: TFolder | undefined,
-	// 		filename: string
-	// 	) => Promise<TFile>;
-	// }
-	// interface DataAdapter {
-	// 	basePath: string;
-	// 	fs: {
-	// 		uri: string;
-	// 	};
-	// }
+	interface Vault {
+		getConfig: (key: string) => string;
+		exists: (path: string) => Promise<boolean>;
+	}
+	interface FileManager {
+		createNewMarkdownFile: (
+			folder: TFolder | undefined,
+			filename: string
+		) => Promise<TFile>;
+	}
+	interface DataAdapter {
+		basePath: string;
+		fs: {
+			uri: string;
+		};
+	}
 }
 
 export interface SourceTemplateExtractMap {
@@ -31,8 +37,10 @@ export interface SourceTemplateValueMap {
 }
 
 export interface AddSourceResult {
-	filename?: string;
-	body?: string;
+	filename: string;
+	templatePath: string;
+	outputDirPath: string;
+	templateMap: SourceTemplateValueMap;
 }
 
 export interface SourceTagProps {
@@ -57,21 +65,24 @@ export interface SourceSettingPropsMap {
 	[key: string]: SourceSettingProps;
 }
 
-export interface SourceMetaOptions {
-	id: string;
-	showForm?: boolean;
-	showBuilder?: boolean;
-	builderUrl?: string;
-	builderResults?: SourceTagProps[];
+export interface ImportSourceSettings {
+	sources: SourceSettingPropsMap;
+	dateFormat?: string;
+	defaultFilenameTemplate?: string;
+	defaultTemplateFilePath?: string;
+	defaultOutputDirPath?: string;
 }
 
 export interface SourceMetaOptionsMap {
 	[key: string]: SourceMetaOptions;
 }
 
-export interface ImportSourceSettings {
-	sources?: SourceSettingPropsMap;
-	dateFormat?: string;
+export interface SourceMetaOptions {
+	id: string;
+	showForm?: boolean;
+	showBuilder?: boolean;
+	builderUrl?: string;
+	builderResults?: SourceTagProps[];
 }
 
 export interface SourceSettingRenderProps {
@@ -82,4 +93,34 @@ export interface SourceSettingRenderProps {
 	sourcesMeta: SourceMetaOptionsMap;
 	save: () => Promise<void>;
 	refresh: () => Promise<void>;
+}
+
+export interface AddSourceModalData {
+	url?: string;
+	domain?: string;
+	sourceId?: string;
+	source?: SourceSettingProps;
+	sourceTemplateTags: string[];
+	defaultTags: AddSourceModalDefaultTagData;
+}
+
+export interface AddSourceModalDefaultTagData {
+	title?: string;
+	channelName?: string;
+	channelUrl?: string;
+}
+
+export interface DefaultGetValueProps {
+	data: AddSourceModalData;
+	dateFormat: string;
+	moment: any;
+}
+export interface DefaultSourceTagsMapValue {
+	getValue: (props: DefaultGetValueProps) => string | undefined;
+	description: string;
+	name: string;
+}
+
+export interface DefaultSourceTagsMapProps {
+	[key: string]: DefaultSourceTagsMapValue;
 }

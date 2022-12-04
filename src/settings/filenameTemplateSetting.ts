@@ -2,7 +2,7 @@ import { Setting } from "obsidian";
 import { fullWidthInputClass } from "../constants";
 import { SourceSettingRenderProps } from "../types";
 
-export const renderSourceFilenameTemplateSetting = (
+export const filenameTemplateSetting = (
 	props: SourceSettingRenderProps
 ) => {
 	const { el, source, save } = props;

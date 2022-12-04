@@ -1,7 +1,7 @@
 import { Setting } from "obsidian";
 import { SourceSettingRenderProps } from "../types";
 
-export const renderSourceDomainsSetting = (props: SourceSettingRenderProps) => {
+export const domainsSetting = (props: SourceSettingRenderProps) => {
 	const { el, source, save, refresh } = props;
 
 	source.domains ||= [];

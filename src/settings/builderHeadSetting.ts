@@ -1,17 +1,17 @@
 import { Notice, requestUrl, Setting } from "obsidian";
-import {
-	extractMetaTagsFromHtml,
-	extractPropsFromMetaTagStrings,
-} from "../helpers";
+import { extractMetaTagsFromHtml } from "src/helpers/extractMetaTagsFromHtml";
+import { extractPropsFromMetaTagStrings } from "src/helpers/extractPropsFromMetaTagStrings";
 import { SourceSettingRenderProps } from "../types";
 
-export const renderSourceMetaBuilderSetting = (
+export const builderHeadSetting = (
 	props: SourceSettingRenderProps
 ) => {
 	const { el, sourceMeta, refresh } = props;
 
 	const setting = new Setting(el)
-		.setName("Source Settings")
+		.setName(			sourceMeta.showBuilder
+			? "Source Builder"
+			: "Source Settings")
 		.setDesc(
 			sourceMeta.showBuilder
 				? "Paste a URL and 'Sync'"

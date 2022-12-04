@@ -1,7 +1,7 @@
 import { Setting } from "obsidian";
 import { SourceSettingRenderProps } from "../types";
 
-export const renderSourceSetting = (props: SourceSettingRenderProps) => {
+export const sourceSetting = (props: SourceSettingRenderProps) => {
 	const { el, source, sources, sourceMeta, sourcesMeta, save, refresh } =
 		props;
 
@@ -19,7 +19,7 @@ export const renderSourceSetting = (props: SourceSettingRenderProps) => {
 		)
 		.addToggle((toggle) =>
 			toggle
-				.setTooltip("Toggle source form")
+				.setTooltip("Toggle source settings")
 				.setValue(sourceMeta.showForm || false)
 				.onChange(async (value) => {
 					sourceMeta.showForm = value;

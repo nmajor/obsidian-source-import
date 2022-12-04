@@ -1,7 +1,7 @@
 import { Setting } from "obsidian";
 import { SourceSettingRenderProps } from "../types";
 
-export const renderSourceTagsHeadSetting = (props: SourceSettingRenderProps) => {
+export const tagsHeadSetting = (props: SourceSettingRenderProps) => {
 		const { el, source, save, refresh } = props;
 
 		new Setting(el)

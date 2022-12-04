@@ -2,7 +2,7 @@ import { Setting } from "obsidian";
 import { FileSuggest } from "../suggest/FileSuggest";
 import { SourceSettingRenderProps } from "../types";
 
-export const renderSourceTemplateFilePathSetting = (
+export const templateFilePathSetting = (
 	props: SourceSettingRenderProps
 ) => {
 	const { el, source, save } = props;

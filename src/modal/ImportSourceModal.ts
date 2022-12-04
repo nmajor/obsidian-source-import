@@ -1,44 +1,27 @@
 import { Modal, Notice, requestUrl, Setting } from "obsidian";
 import SourceImportPlugin from "src/main";
-import {
-	constructDefaultTemplateMap,
-	constructTemplateExtractMap,
-	extractDomainFromUrl,
-	extractMetaTagsFromHtml,
-	extractDefaultTagDataFromHtml,
-	generateContentFromTemplate,
-	transformMetaTagStringsToTemplateMap,
-	removeScriptTags,
-} from "src/helpers";
+
 import {
 	fullWidthInputClass,
 	fullWidthInputWithExtraButtonClass,
 	nestedSettingClass,
-	settingTopBorderClass,
 	settingTopPaddingClass,
 } from "../constants";
 import {
+	AddSourceModalData,
 	AddSourceResult,
 	SourceSettingProps,
 	SourceTemplateValueMap,
 } from "src/types";
 import { FileSuggest } from "src/suggest/FileSuggest";
 import { FolderSuggest } from "src/suggest/FolderSuggest";
-
-export interface AddSourceModalData {
-	url?: string;
-	domain?: string;
-	sourceId?: string;
-	source?: SourceSettingProps;
-	sourceTemplateTags: string[];
-	defaultTags: AddSourceModalDefaultTagData;
-}
-
-export interface AddSourceModalDefaultTagData {
-	title?: string;
-	channelName?: string;
-	channelUrl?: string;
-}
+import { extractMetaTagsFromHtml } from "src/helpers/extractMetaTagsFromHtml";
+import { constructTemplateExtractMap } from "src/helpers/constructTemplateExtractMap";
+import { transformMetaTagStringsToTemplateMap } from "src/helpers/transformMetaTagStringsToTemplateMap";
+import { constructDefaultTemplateMap } from "src/helpers/constructDefaultTemplateMap";
+import { extractDomainFromUrl } from "src/helpers/extractDomainFromUrl";
+import { extractDefaultTagDataFromHtml } from "src/helpers/extractDefaultTagDataFromHtml";
+import { generateContentFromTemplate } from "src/helpers/generateContentFromTemplate";
 
 interface AddSourceModalOptions {
 	plugin: SourceImportPlugin;
@@ -113,7 +96,7 @@ export class AddSourceModal extends Modal {
 			);
 
 		if (this.showTagsForm) {
-			const nestEl = el.createEl("div", {
+			el.createEl("div", {
 				cls: nestedSettingClass,
 			});
 
@@ -197,9 +180,14 @@ export class AddSourceModal extends Modal {
 			...transformMetaTagStringsToTemplateMap(
 				metaTagStrings,
 				extractMap,
+				window.moment,
 				dateFormat
 			),
-			...constructDefaultTemplateMap(this.data, dateFormat),
+			...constructDefaultTemplateMap(
+				this.data,
+				window.moment,
+				dateFormat
+			),
 		};
 
 		return templateValueMap;
@@ -249,29 +237,15 @@ export class AddSourceModal extends Modal {
 								this.data.source
 							)) || [];
 
-						// console.log(
-						// 	"blah hi this.data.sourceTemplateTags",
-						// 	this.data.sourceTemplateTags
-						// );
-
 						const response = await requestUrl({
 							method: "get",
 							url: this.data.url,
 							contentType: "application/json",
 						});
 
-						const htmlString = removeScriptTags(response.text);
-
 						this.data.defaultTags = extractDefaultTagDataFromHtml(
 							response.text
 						);
-
-						console.log("blah htmlString", htmlString);
-
-						// console.log(
-						// 	"blah hi this.data.defaultTags",
-						// 	this.data.defaultTags
-						// );
 
 						this.templateMap = this.buildTemplateMap(
 							response.text,
@@ -295,7 +269,7 @@ export class AddSourceModal extends Modal {
 
 	onOpen() {
 		const { contentEl, titleEl } = this;
-		titleEl.setText("Add Source");
+		titleEl.setText("Import Source");
 
 		this.renderUrlSetting(contentEl);
 

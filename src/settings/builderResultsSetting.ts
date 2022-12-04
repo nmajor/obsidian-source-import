@@ -1,9 +1,9 @@
 import { Setting } from "obsidian";
+import { extractDomainFromUrl } from "src/helpers/extractDomainFromUrl";
 import { builderResultClass, nestedSettingClass } from "../constants";
-import { extractDomainFromUrl } from "../helpers";
 import { SourceSettingRenderProps, SourceTagProps } from "../types";
 
-export const renderSourceBuilderResultsSetting = (
+export const builderResultsSetting = (
 	props: SourceSettingRenderProps
 ) => {
 	const { el, source, sourceMeta, save, refresh } = props;
