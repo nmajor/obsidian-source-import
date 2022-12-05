@@ -270,7 +270,8 @@ export class AddSourceModal extends Modal {
 						this.filename =
 							generateContentFromTemplate(
 								this.data.source?.filenameTemplate || "",
-								this.templateMap
+								this.templateMap,
+								true
 							) ||
 							"Could not generate filename. Replace this text with a filename.";
 						this.template = this.data.source.templateFilePath;
