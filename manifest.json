@@ -1,10 +1,10 @@
 {
-	"id": "import-source",
-	"name": "Import Source",
+	"id": "source-meta",
+	"name": "Source Meta",
 	"version": "0.0.1",
 	"minAppVersion": "0.0.1",
-	"description": "Plugin for importing metatag data from source URLs into simple templates",
-	"author": "Obsidian",
-	"authorUrl": "https://obsidian.md",
+	"description": "Plugin for importing metatag data from source webpages into simple templates",
+	"author": "nmajor",
+	"authorUrl": "https://nmajor.com",
 	"isDesktopOnly": false
 }
